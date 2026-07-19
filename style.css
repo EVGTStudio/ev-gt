@@ -457,11 +457,13 @@ body{
 
     display:grid;
 
-    grid-template-columns:
-
-    repeat(auto-fit,minmax(260px,1fr));
+    grid-template-columns:repeat(3,1fr);
 
     gap:34px;
+
+    max-width:1100px;
+
+    margin:0 auto;
 
 }
 
@@ -580,6 +582,11 @@ footer{
 ========================================================= */
 
 @media(max-width:900px){
+       .grid{
+
+        grid-template-columns:1fr;
+
+    }
 
     .navbar{
 
