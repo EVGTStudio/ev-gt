@@ -166,5 +166,28 @@ animateGlow();
 /* ==========================================================
    Console
 ========================================================== */
+/* ==========================================================
+   Hero Story Transition
+========================================================== */
 
+const story1 = document.getElementById("story1");
+const story2 = document.getElementById("story2");
+
+window.addEventListener("scroll", () => {
+
+    const trigger = window.innerHeight * 0.18;
+
+    if (window.scrollY > trigger) {
+
+        story1.style.opacity = "0";
+        story2.style.opacity = "1";
+
+    } else {
+
+        story1.style.opacity = "1";
+        story2.style.opacity = "0";
+
+    }
+
+});
 console.log("EV.GT Experience Version 4.0");
