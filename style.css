@@ -1,7 +1,19 @@
 /* =========================================================
    EV.GT EXPERIENCE
-   Version 4.0
+   Version 5.0 — Grand Touring Edition
 ========================================================= */
+
+:root{
+    --bg:#050505;
+    --electric:#4fd3ff;
+    --electric-dim:rgba(79,211,255,.18);
+    --gt-red:#ff2d3c;
+    --gt-red-dim:rgba(255,45,60,.16);
+    --text-dim:#8f8f8f;
+    --text-mid:#cfcfcf;
+    --line:rgba(255,255,255,.08);
+    --mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",monospace;
+}
 
 *{
     margin:0;
@@ -15,9 +27,31 @@ html{
 
 body{
     font-family:"Manrope",sans-serif;
-    background:#050505;
+    background:var(--bg);
     color:#ffffff;
     overflow-x:hidden;
+}
+
+/* =========================================================
+   Progress Bar (Rev Gauge)
+========================================================= */
+
+.progress-bar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:3px;
+    z-index:1001;
+    background:rgba(255,255,255,.05);
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--electric),var(--gt-red));
+    box-shadow:0 0 12px rgba(79,211,255,.6);
+    transition:width .1s linear;
 }
 
 /* =========================================================
@@ -29,8 +63,7 @@ body{
     inset:0;
     pointer-events:none;
     opacity:.03;
-    background-image:
-    radial-gradient(circle,#ffffff 1px,transparent 1px);
+    background-image:radial-gradient(circle,#ffffff 1px,transparent 1px);
     background-size:6px 6px;
     z-index:1;
 }
@@ -40,10 +73,7 @@ body{
     width:900px;
     height:900px;
     border-radius:50%;
-    background:
-    radial-gradient(circle,
-    rgba(0,170,255,.22),
-    transparent 70%);
+    background:radial-gradient(circle,rgba(0,170,255,.22),transparent 70%);
     filter:blur(30px);
     animation:pulse 10s infinite alternate;
 }
@@ -63,11 +93,9 @@ body{
     align-items:center;
     padding:18px 34px;
     border-radius:20px;
-    background:
-    rgba(255,255,255,.05);
+    background:rgba(255,255,255,.05);
     backdrop-filter:blur(18px);
-    border:
-    1px solid rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
     z-index:999;
 }
 
@@ -75,6 +103,10 @@ body{
     font-size:22px;
     font-weight:800;
     letter-spacing:.35em;
+}
+
+.logo .dot{
+    color:var(--gt-red);
 }
 
 .menu{
@@ -87,10 +119,27 @@ body{
     text-decoration:none;
     transition:.35s;
     font-weight:500;
+    position:relative;
+}
+
+.menu a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-6px;
+    width:0%;
+    height:2px;
+    background:var(--gt-red);
+    transition:width .35s ease;
 }
 
 .menu a:hover{
     color:#4fd3ff;
+}
+
+.menu a:hover::after{
+    width:100%;
+    background:var(--electric);
 }
 
 /* =========================================================
@@ -117,8 +166,21 @@ body{
     letter-spacing:.08em;
 }
 
+.hero-tag{
+    position:relative;
+    z-index:20;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.3em;
+    color:var(--gt-red);
+    margin-bottom:34px;
+    opacity:0;
+    animation:fadeUp 1s forwards;
+    animation-delay:.1s;
+}
+
 /* =========================================================
-   Logo Animation
+   Logo Reveal — "Drive-In"
 ========================================================= */
 
 .letters{
@@ -132,62 +194,42 @@ body{
     font-weight:800;
     letter-spacing:.08em;
     opacity:0;
-    transform:translateY(40px);
-    animation:letterReveal .8s forwards;
+    display:inline-block;
+    transform:translateX(-60px) skewX(-12deg);
+    filter:blur(8px);
+    animation:driveIn .7s cubic-bezier(.16,.84,.44,1) forwards;
 }
 
-.letters span:nth-child(2){
-    animation-delay:.25s;
+.letters span.dot-letter{
+    color:var(--gt-red);
 }
 
-.letters span:nth-child(3){
-    animation-delay:.50s;
-}
-
-.letters span:nth-child(4){
-    animation-delay:.75s;
-}
-
-.letters span:nth-child(5){
-    animation-delay:1s;
-}
+.letters span:nth-child(2){ animation-delay:.12s; }
+.letters span:nth-child(3){ animation-delay:.24s; }
+.letters span:nth-child(4){ animation-delay:.36s; }
+.letters span:nth-child(5){ animation-delay:.48s; }
 
 /* =========================================================
-   Subtitle / Story transition
+   Subtitle — robust crossfade (single element)
 ========================================================= */
-
-.story-container{
-    position:relative;
-    min-height:90px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-#story1,
-#story2{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:100%;
-    transition:opacity .8s ease;
-}
-
-.hidden{
-    opacity:0;
-    pointer-events:none;
-}
 
 .subtitle{
     margin-top:45px;
     font-size:clamp(18px,2vw,30px);
-    color:#cfcfcf;
+    color:var(--text-mid);
     letter-spacing:.12em;
     text-align:center;
     opacity:0;
     animation:fadeUp 1.2s forwards;
-    animation-delay:1.6s;
+    animation-delay:1.4s;
+    transition:opacity .5s ease,transform .5s ease,filter .5s ease;
+    will-change:opacity,transform,filter;
+}
+
+.subtitle.swap{
+    opacity:0;
+    transform:translateY(10px);
+    filter:blur(6px);
 }
 
 /* =========================================================
@@ -217,12 +259,12 @@ body{
     width:6px;
     height:6px;
     border-radius:50%;
-    background:#ffffff;
+    background:var(--gt-red);
     animation:wheel 2s infinite;
 }
 
 /* =========================================================
-   Story
+   Story / Chapters
 ========================================================= */
 
 .story{
@@ -239,16 +281,42 @@ body{
     margin-bottom:180px;
 }
 
+.chapter-marker{
+    position:relative;
+}
+
 .chapter-letter{
     font-size:190px;
     font-weight:800;
-    color:#4fd3ff;
-    opacity:.25;
+    color:var(--electric);
+    opacity:.22;
+    line-height:1;
+}
+
+.speed-line{
+    position:absolute;
+    left:0;
+    bottom:18px;
+    width:0%;
+    height:3px;
+    background:linear-gradient(90deg,var(--gt-red),transparent);
+    transition:width 1s cubic-bezier(.16,.84,.44,1);
+}
+
+.chapter.in-view .speed-line{
+    width:120%;
+}
+
+.chapter-index{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:.3em;
+    color:var(--gt-red);
 }
 
 .chapter-text h2{
     font-size:58px;
-    margin-bottom:20px;
+    margin:12px 0 20px;
     font-weight:700;
 }
 
@@ -274,6 +342,12 @@ body{
     font-weight:800;
     letter-spacing:.18em;
     margin-bottom:70px;
+    background:linear-gradient(100deg,#ffffff 30%,var(--electric) 45%,var(--gt-red) 55%,#ffffff 70%);
+    background-size:250% 100%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:sweep 6s ease-in-out infinite;
 }
 
 .reveal h2{
@@ -287,6 +361,64 @@ body{
     color:#bdbdbd;
     font-size:clamp(20px,2vw,30px);
     letter-spacing:.08em;
+}
+
+/* =========================================================
+   Specs — Technical Data Sheet
+========================================================= */
+
+.specs{
+    padding:200px 8%;
+    max-width:900px;
+    margin:0 auto;
+}
+
+.specs h2{
+    text-align:center;
+    font-size:clamp(36px,5vw,64px);
+    margin-bottom:90px;
+    letter-spacing:.04em;
+}
+
+.spec-sheet{
+    border-top:1px solid var(--line);
+}
+
+.spec-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:26px 4px;
+    border-bottom:1px solid var(--line);
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .7s ease,transform .7s ease;
+}
+
+.spec-row.in-view{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.spec-label{
+    color:var(--text-dim);
+    font-size:15px;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+}
+
+.spec-value{
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:.03em;
+}
+
+.spec-value.mono{
+    font-family:var(--mono);
+}
+
+.spec-value.accent{
+    color:var(--gt-red);
 }
 
 /* =========================================================
@@ -315,10 +447,9 @@ body{
 }
 
 .card{
-    background:
-    rgba(255,255,255,.04);
-    border:
-    1px solid rgba(255,255,255,.08);
+    position:relative;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
     border-radius:22px;
     padding:55px 35px;
     text-align:center;
@@ -328,12 +459,19 @@ body{
     transition:.45s;
 }
 
+.card-index{
+    display:block;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gt-red);
+    letter-spacing:.2em;
+    margin-bottom:16px;
+}
+
 .card:hover{
-    transform:
-    translateY(-12px);
-    border-color:#4fd3ff;
-    box-shadow:
-    0 20px 50px rgba(0,170,255,.18);
+    transform:translateY(-12px);
+    border-color:var(--electric);
+    box-shadow:0 20px 50px rgba(0,170,255,.18),0 0 0 1px rgba(255,45,60,.15) inset;
 }
 
 /* =========================================================
@@ -353,20 +491,46 @@ body{
 .contact p{
     color:#c5c5c5;
     font-size:24px;
-    margin-bottom:45px;
+    margin-bottom:55px;
 }
 
-.contact a{
+.contact-button{
+    position:relative;
+    display:inline-block;
+    padding:22px 54px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:40px;
     color:white;
     text-decoration:none;
-    font-size:34px;
+    font-size:22px;
     font-weight:700;
     letter-spacing:.08em;
-    transition:.35s;
+    overflow:hidden;
+    z-index:1;
 }
 
-.contact a:hover{
-    color:#4fd3ff;
+.contact-button span{
+    position:relative;
+    z-index:2;
+}
+
+.contact-button::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,var(--electric),var(--gt-red));
+    transform:translateX(-100%);
+    transition:transform .5s cubic-bezier(.16,.84,.44,1);
+    z-index:1;
+}
+
+.contact-button:hover::before{
+    transform:translateX(0);
+}
+
+.contact-button:hover{
+    border-color:transparent;
+    color:#050505;
 }
 
 /* =========================================================
@@ -378,7 +542,8 @@ footer{
     text-align:center;
     color:#555;
     letter-spacing:.35em;
-    font-size:14px;
+    font-size:13px;
+    font-family:var(--mono);
 }
 
 /* =========================================================
@@ -389,37 +554,36 @@ footer{
     .grid{
         grid-template-columns:1fr;
     }
-
     .navbar{
         padding:15px 22px;
     }
-
     .menu{
         gap:18px;
         font-size:14px;
     }
-
     .chapter{
         grid-template-columns:1fr;
         text-align:center;
         gap:30px;
     }
-
     .chapter-letter{
         font-size:120px;
     }
-
     .chapter-text h2{
         font-size:42px;
     }
-
     .chapter-text p{
         font-size:19px;
         margin:auto;
     }
-
-    .contact a{
-        font-size:24px;
+    .spec-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+    }
+    .contact-button{
+        font-size:18px;
+        padding:18px 38px;
     }
 }
 
@@ -428,45 +592,29 @@ footer{
 ========================================================= */
 
 @keyframes pulse{
-    from{
-        transform:scale(1);
-        opacity:.20;
-    }
-    to{
-        transform:scale(1.30);
-        opacity:.35;
-    }
+    from{ transform:scale(1); opacity:.20; }
+    to{ transform:scale(1.30); opacity:.35; }
 }
 
-@keyframes letterReveal{
-    from{
-        opacity:0;
-        transform:translateY(45px);
-    }
+@keyframes driveIn{
     to{
         opacity:1;
-        transform:translateY(0);
+        transform:translateX(0) skewX(0deg);
+        filter:blur(0);
     }
 }
 
 @keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(35px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{ opacity:0; transform:translateY(35px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 @keyframes wheel{
-    0%{
-        opacity:1;
-        transform:translate(-50%,0);
-    }
-    100%{
-        opacity:0;
-        transform:translate(-50%,18px);
-    }
+    0%{ opacity:1; transform:translate(-50%,0); }
+    100%{ opacity:0; transform:translate(-50%,18px); }
+}
+
+@keyframes sweep{
+    0%,100%{ background-position:200% 0; }
+    50%{ background-position:0% 0; }
 }
