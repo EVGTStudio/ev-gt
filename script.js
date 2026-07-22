@@ -11,6 +11,31 @@ const reveal = document.querySelector(".reveal");
 const navbar = document.querySelector(".navbar");
 const progressFill = document.getElementById("progressFill");
 const subtitle = document.getElementById("subtitle");
+const menuToggle = document.getElementById("menuToggle");
+const mobileMenu = document.getElementById("mobileMenu");
+
+
+/* ==========================================================
+   Mobile Menu Toggle
+========================================================== */
+
+menuToggle.addEventListener("click", () => {
+
+    menuToggle.classList.toggle("open");
+    mobileMenu.classList.toggle("open");
+
+});
+
+mobileMenu.querySelectorAll("a").forEach((link) => {
+
+    link.addEventListener("click", () => {
+
+        menuToggle.classList.remove("open");
+        mobileMenu.classList.remove("open");
+
+    });
+
+});
 
 /* ==========================================================
    Mouse Parallax
