@@ -1,13 +1,16 @@
 /* ==========================================================
    EV.GT EXPERIENCE
-   Version 4.0
+   Version 5.0 — Grand Touring Edition
 ========================================================== */
 
 const glow = document.querySelector(".glow");
 const cards = document.querySelectorAll(".card");
 const chapters = document.querySelectorAll(".chapter");
+const specRows = document.querySelectorAll(".spec-row");
 const reveal = document.querySelector(".reveal");
 const navbar = document.querySelector(".navbar");
+const progressFill = document.getElementById("progressFill");
+const subtitle = document.getElementById("subtitle");
 
 /* ==========================================================
    Mouse Parallax
@@ -25,7 +28,7 @@ document.addEventListener("mousemove", (e) => {
 
 
 /* ==========================================================
-   Navbar
+   Navbar + Scroll Progress Bar
 ========================================================== */
 
 window.addEventListener("scroll", () => {
@@ -44,11 +47,15 @@ window.addEventListener("scroll", () => {
 
     }
 
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+    progressFill.style.width = progress + "%";
+
 });
 
 
 /* ==========================================================
-   Scroll Reveal
+   Scroll Reveal (chapters, reveal section, spec rows)
 ========================================================== */
 
 const observer = new IntersectionObserver((entries) => {
@@ -61,6 +68,8 @@ const observer = new IntersectionObserver((entries) => {
             entry.target.style.transform = "translateY(0)";
             entry.target.style.transition =
                 "all .9s cubic-bezier(.22,.61,.36,1)";
+
+            entry.target.classList.add("in-view");
 
         }
 
@@ -85,9 +94,51 @@ chapters.forEach(chapter => {
 
 observer.observe(reveal);
 
+specRows.forEach(row => observer.observe(row));
+
 
 /* ==========================================================
-   Cards
+   Spec Counter Animation
+========================================================== */
+
+const counters = document.querySelectorAll(".counter");
+
+const counterObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            let current = 0;
+
+            const step = () => {
+
+                current += 1;
+                el.textContent = current;
+
+                if (current < target) {
+                    requestAnimationFrame(step);
+                }
+
+            };
+
+            step();
+
+            counterObserver.unobserve(el);
+
+        }
+
+    });
+
+}, { threshold: 0.6 });
+
+counters.forEach(c => counterObserver.observe(c));
+
+
+/* ==========================================================
+   Cards — 3D Tilt
 ========================================================== */
 
 cards.forEach((card) => {
@@ -164,30 +215,43 @@ animateGlow();
 
 
 /* ==========================================================
-   Console
-========================================================== */
-/* ==========================================================
-   Hero Story Transition
+   Hero Subtitle Crossfade (robust single-element version)
 ========================================================== */
 
-const story1 = document.getElementById("story1");
-const story2 = document.getElementById("story2");
+const subtitleTexts = [
+    "Every letter tells a story.",
+    "Every story has a destination."
+];
+
+let subtitleShowingSecond = false;
 
 window.addEventListener("scroll", () => {
 
     const trigger = window.innerHeight * 0.18;
+    const shouldShowSecond = window.scrollY > trigger;
 
-    if (window.scrollY > trigger) {
+    if (shouldShowSecond !== subtitleShowingSecond) {
 
-        story1.style.opacity = "0";
-        story2.style.opacity = "1";
+        subtitleShowingSecond = shouldShowSecond;
 
-    } else {
+        subtitle.classList.add("swap");
 
-        story1.style.opacity = "1";
-        story2.style.opacity = "0";
+        setTimeout(() => {
+
+            subtitle.textContent =
+                subtitleTexts[subtitleShowingSecond ? 1 : 0];
+
+            subtitle.classList.remove("swap");
+
+        }, 260);
 
     }
 
 });
-console.log("EV.GT Experience Version 4.0");
+
+
+/* ==========================================================
+   Console
+========================================================== */
+
+console.log("EV.GT Experience Version 5.0 — Grand Touring Edition");
