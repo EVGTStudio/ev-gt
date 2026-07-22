@@ -166,19 +166,6 @@ body{
     letter-spacing:.08em;
 }
 
-.hero-tag{
-    position:relative;
-    z-index:20;
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:.3em;
-    color:var(--gt-red);
-    margin-bottom:34px;
-    opacity:0;
-    animation:fadeUp 1s forwards;
-    animation-delay:.1s;
-}
-
 /* =========================================================
    Logo Reveal — "Drive-In"
 ========================================================= */
@@ -305,13 +292,6 @@ body{
 
 .chapter.in-view .speed-line{
     width:120%;
-}
-
-.chapter-index{
-    font-family:var(--mono);
-    font-size:13px;
-    letter-spacing:.3em;
-    color:var(--gt-red);
 }
 
 .chapter-text h2{
@@ -457,15 +437,6 @@ body{
     font-weight:600;
     backdrop-filter:blur(20px);
     transition:.45s;
-}
-
-.card-index{
-    display:block;
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--gt-red);
-    letter-spacing:.2em;
-    margin-bottom:16px;
 }
 
 .card:hover{
