@@ -242,9 +242,9 @@ body{
 
 }
 
-/* ==========================================================
+/* =========================================================
    Subtitle
-========================================================== */
+========================================================= */
 
 .story-container{
 
@@ -257,26 +257,6 @@ body{
     align-items:center;
 
     justify-content:center;
-
-}
-
-.subtitle{
-
-    margin-top:45px;
-
-    font-size:clamp(18px,2vw,30px);
-
-    color:#cfcfcf;
-
-    letter-spacing:.12em;
-
-    text-align:center;
-
-    opacity:0;
-
-    animation:fadeUp 1.2s forwards;
-
-    animation-delay:1.6s;
 
 }
 
@@ -304,6 +284,27 @@ body{
     pointer-events:none;
 
 }
+
+.subtitle{
+
+    margin-top:45px;
+
+    font-size:clamp(18px,2vw,30px);
+
+    color:#cfcfcf;
+
+    letter-spacing:.12em;
+
+    text-align:center;
+
+    opacity:0;
+
+    animation:fadeUp 1.2s forwards;
+
+    animation-delay:1.6s;
+
+}
+
 /* =========================================================
    Scroll Indicator
 ========================================================= */
