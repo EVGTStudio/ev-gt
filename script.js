@@ -6,13 +6,69 @@
 const glow = document.querySelector(".glow");
 const cards = document.querySelectorAll(".card");
 const chapters = document.querySelectorAll(".chapter");
+const chapterLetters = document.querySelectorAll(".chapter-letter");
 const specRows = document.querySelectorAll(".spec-row");
 const reveal = document.querySelector(".reveal");
+const revealLogo = document.querySelector(".reveal-logo");
+const backgroundTitle = document.querySelector(".background-title");
 const navbar = document.querySelector(".navbar");
 const progressFill = document.getElementById("progressFill");
 const subtitle = document.getElementById("subtitle");
 const menuToggle = document.getElementById("menuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
+const loader = document.getElementById("loader");
+const customCursor = document.getElementById("customCursor");
+
+
+/* ==========================================================
+   Loading Intro
+========================================================== */
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+        loader.classList.add("loader-hidden");
+    }, 1200);
+
+});
+
+
+/* ==========================================================
+   Custom Cursor (Desktop only)
+========================================================== */
+
+if (window.matchMedia("(min-width: 901px)").matches && customCursor) {
+
+    let cursorX = window.innerWidth / 2;
+    let cursorY = window.innerHeight / 2;
+
+    document.addEventListener("mousemove", (e) => {
+
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+
+        customCursor.style.transform =
+            `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+    });
+
+    const hoverTargets = document.querySelectorAll(
+        "a, button, .card, input, textarea"
+    );
+
+    hoverTargets.forEach((el) => {
+
+        el.addEventListener("mouseenter", () => {
+            customCursor.classList.add("cursor-hover");
+        });
+
+        el.addEventListener("mouseleave", () => {
+            customCursor.classList.remove("cursor-hover");
+        });
+
+    });
+
+}
 
 
 /* ==========================================================
@@ -41,13 +97,18 @@ mobileMenu.querySelectorAll("a").forEach((link) => {
    Mouse Parallax
 ========================================================== */
 
+let targetGlowX = 0;
+let targetGlowY = 0;
+let currentGlowX = 0;
+let currentGlowY = 0;
+
 document.addEventListener("mousemove", (e) => {
 
     const x = e.clientX / window.innerWidth;
     const y = e.clientY / window.innerHeight;
 
-    glow.style.transform =
-        `translate(${x * 40 - 20}px, ${y * 40 - 20}px) scale(1.15)`;
+    targetGlowX = x * 40 - 20;
+    targetGlowY = y * 40 - 20;
 
 });
 
@@ -184,6 +245,9 @@ cards.forEach((card) => {
              rotateY(${rotateY}deg)
              translateY(-12px)`;
 
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+
     });
 
     card.addEventListener("mouseleave", () => {
@@ -227,10 +291,14 @@ function animateGlow() {
 
     const scale = 1 + Math.sin(t) * 0.04;
 
+    currentGlowX += (targetGlowX - currentGlowX) * 0.06;
+    currentGlowY += (targetGlowY - currentGlowY) * 0.06;
+
+    glow.style.transform =
+        `translate(${currentGlowX}px, ${currentGlowY}px) scale(${scale * 1.15})`;
+
     glow.style.filter =
         `blur(35px) brightness(${1 + Math.sin(t) * 0.15})`;
-
-    glow.style.scale = scale;
 
     requestAnimationFrame(animateGlow);
 
@@ -273,6 +341,52 @@ window.addEventListener("scroll", () => {
     }
 
 });
+
+
+/* ==========================================================
+   Scroll-Linked Cinematic Effects
+   (Hero Parallax, Chapter Letter Zoom, Reveal Color Sweep)
+========================================================== */
+
+function updateCinematicEffects() {
+
+    const scrollY = window.scrollY;
+    const viewportH = window.innerHeight;
+    const viewportCenter = scrollY + viewportH / 2;
+
+    // Hero background title — slow parallax drift
+    if (backgroundTitle) {
+        backgroundTitle.style.transform = `translateY(${scrollY * 0.15}px)`;
+    }
+
+    // Chapter ghost letters — scale as they pass through viewport center
+    chapterLetters.forEach((letter) => {
+
+        const rect = letter.getBoundingClientRect();
+        const letterCenter = scrollY + rect.top + rect.height / 2;
+        const distance = (letterCenter - viewportCenter) / viewportH;
+        const scale = 1.15 - Math.min(Math.abs(distance), 1) * 0.3;
+
+        letter.style.transform = `scale(${scale})`;
+
+    });
+
+    // Reveal section — color sweep driven by scroll position
+    if (reveal && revealLogo) {
+
+        const rect = reveal.getBoundingClientRect();
+        const total = rect.height + viewportH;
+        const progress = 1 - (rect.top + rect.height) / total;
+        const clamped = Math.min(Math.max(progress, 0), 1);
+
+        revealLogo.style.backgroundPosition = `${200 - clamped * 200}% 0`;
+
+    }
+
+}
+
+window.addEventListener("scroll", updateCinematicEffects);
+updateCinematicEffects();
 
 
 /* ==========================================================
