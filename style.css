@@ -388,8 +388,8 @@ body{
     width:6px;
     height:6px;
     border-radius:50%;
-    background:var(--gt-red);
-    animation:wheel 2s infinite;
+    background-color:#ff2d3c;
+    animation:wheel 2.2s infinite;
 }
 
 /* =========================================================
@@ -471,16 +471,12 @@ body{
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
-    background-position:220% 0;
+    animation:sweep 6s ease-in-out infinite;
 }
 
-.reveal.in-view .reveal-logo{
-    animation:revealWhoosh 1.1s cubic-bezier(.16,.84,.44,1) forwards;
-}
-
-@keyframes revealWhoosh{
-    0%{ background-position:220% 0; }
-    100%{ background-position:-20% 0; }
+@keyframes sweep{
+    0%,100%{ background-position:200% 0; }
+    50%{ background-position:0% 0; }
 }
 
 .reveal h2{
@@ -807,6 +803,7 @@ footer{
 }
 
 @keyframes wheel{
-    0%{ opacity:1; transform:translate(-50%,0); }
-    100%{ opacity:0; transform:translate(-50%,18px); }
+    0%{ opacity:1; transform:translate(-50%,0); background-color:#ff2d3c; }
+    50%{ opacity:.85; transform:translate(-50%,9px); background-color:#e0a300; }
+    100%{ opacity:0; transform:translate(-50%,18px); background-color:#2fbf6e; }
 }
