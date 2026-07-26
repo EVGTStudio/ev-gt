@@ -371,15 +371,13 @@ function updateCinematicEffects() {
 
     });
 
-    // Reveal heading — sharpen into focus as it nears viewport center
+    // Reveal heading — sharpens into focus on the way in, then stays sharp
     if (revealHeading) {
 
         const rect = revealHeading.getBoundingClientRect();
         const headingCenter = scrollY + rect.top + rect.height / 2;
-        const distance = Math.min(
-            Math.abs(headingCenter - viewportCenter) / viewportH,
-            1
-        );
+        const rawDistance = (headingCenter - viewportCenter) / viewportH;
+        const distance = Math.min(Math.max(rawDistance, 0), 1);
 
         const scale = 1 - distance * 0.08;
         const blur = distance * 6;
