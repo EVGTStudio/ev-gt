@@ -9,6 +9,7 @@ const chapters = document.querySelectorAll(".chapter");
 const chapterLetters = document.querySelectorAll(".chapter-letter");
 const specRows = document.querySelectorAll(".spec-row");
 const reveal = document.querySelector(".reveal");
+const revealHeading = document.querySelector(".reveal h2");
 const backgroundTitle = document.querySelector(".background-title");
 const navbar = document.querySelector(".navbar");
 const progressFill = document.getElementById("progressFill");
@@ -369,6 +370,26 @@ function updateCinematicEffects() {
         letter.style.transform = `scale(${scale})`;
 
     });
+
+    // Reveal heading — sharpen into focus as it nears viewport center
+    if (revealHeading) {
+
+        const rect = revealHeading.getBoundingClientRect();
+        const headingCenter = scrollY + rect.top + rect.height / 2;
+        const distance = Math.min(
+            Math.abs(headingCenter - viewportCenter) / viewportH,
+            1
+        );
+
+        const scale = 1 - distance * 0.08;
+        const blur = distance * 6;
+        const spacing = distance * 0.22;
+
+        revealHeading.style.transform = `scale(${scale})`;
+        revealHeading.style.filter = `blur(${blur}px)`;
+        revealHeading.style.letterSpacing = `${spacing}em`;
+
+    }
 
 }
 
