@@ -9,7 +9,6 @@ const chapters = document.querySelectorAll(".chapter");
 const chapterLetters = document.querySelectorAll(".chapter-letter");
 const specRows = document.querySelectorAll(".spec-row");
 const reveal = document.querySelector(".reveal");
-const revealLogo = document.querySelector(".reveal-logo");
 const backgroundTitle = document.querySelector(".background-title");
 const navbar = document.querySelector(".navbar");
 const progressFill = document.getElementById("progressFill");
@@ -28,7 +27,7 @@ window.addEventListener("load", () => {
 
     setTimeout(() => {
         loader.classList.add("loader-hidden");
-    }, 1200);
+    }, 350);
 
 });
 
@@ -370,18 +369,6 @@ function updateCinematicEffects() {
         letter.style.transform = `scale(${scale})`;
 
     });
-
-    // Reveal section — color sweep driven by scroll position
-    if (reveal && revealLogo) {
-
-        const rect = reveal.getBoundingClientRect();
-        const total = rect.height + viewportH;
-        const progress = 1 - (rect.top + rect.height) / total;
-        const clamped = Math.min(Math.max(progress, 0), 1);
-
-        revealLogo.style.backgroundPosition = `${200 - clamped * 200}% 0`;
-
-    }
 
 }
 
