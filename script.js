@@ -182,6 +182,12 @@ observer.observe(reveal);
 
 specRows.forEach(row => observer.observe(row));
 
+const possibilitiesSection = document.querySelector(".possibilities");
+const contactSection = document.querySelector(".contact");
+
+if (possibilitiesSection) observer.observe(possibilitiesSection);
+if (contactSection) observer.observe(contactSection);
+
 
 /* ==========================================================
    Spec Counter Animation
